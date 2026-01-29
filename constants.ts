@@ -1,5 +1,16 @@
-
 import { Planet, QuizQuestion } from './types';
+
+export const MOON_DATA: Planet = {
+  id: 'moon',
+  name: 'הירח',
+  englishName: 'The Moon',
+  description: 'הלוויין הטבעי היחיד של כדור הארץ. הוא משפיע על הגאות והשפל באוקיינוסים שלנו ומאיר את שמי הלילה. הירח הוא המקום היחיד מחוץ לכדור הארץ שבו בני אדם דרכו עליו.',
+  funFact: 'הירח תמיד מפנה אלינו את אותו הצד! אנחנו לעולם לא רואים את "הצד הרחוק" שלו מכדור הארץ ללא חללית.',
+  color: 'bg-slate-300',
+  distanceFromSun: '384,400 ק"מ (מהארץ)',
+  size: '3,474 ק"מ',
+  image: 'https://images.unsplash.com/photo-1522030239044-12f3837721dc?q=80&w=600&auto=format&fit=crop'
+};
 
 export const PLANETS: Planet[] = [
   {
