@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useLayoutEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import Layout from './components/Layout';
 import Hero from './components/Hero';
 import PlanetExplorer from './components/PlanetExplorer';
@@ -9,15 +9,15 @@ const App: React.FC = () => {
   const [isDarkMode, setIsDarkMode] = useState<boolean>(true);
   const [isClient, setIsClient] = useState(false);
 
-  // useLayoutEffect or useEffect to mark the transition to client-side
+  // Sync isClient on mount
   useEffect(() => {
     setIsClient(true);
   }, []);
 
+  // Sync theme
   useEffect(() => {
     if (!isClient) return;
     
-    // Sync theme with document class for Tailwind
     if (isDarkMode) {
       document.documentElement.classList.add('dark');
     } else {
@@ -40,9 +40,10 @@ const App: React.FC = () => {
     }
   };
 
-  // If we haven't mounted yet, render an empty state that matches the index.html's #root
+  // MUST return null on the first render to match the empty <div id="root"></div> in index.html
+  // This prevents hydration mismatch errors in production builds.
   if (!isClient) {
-    return <div className="min-h-screen bg-slate-950"></div>;
+    return null;
   }
 
   return (
