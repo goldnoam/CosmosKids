@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import Layout from './components/Layout';
 import Hero from './components/Hero';
@@ -8,8 +7,10 @@ import SpaceQuiz from './components/SpaceQuiz';
 const App: React.FC = () => {
   const [activeTab, setActiveTab] = useState<string>('home');
   const [isDarkMode, setIsDarkMode] = useState<boolean>(true);
+  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
+    setMounted(true);
     // Sync theme with document class for Tailwind
     if (isDarkMode) {
       document.documentElement.classList.add('dark');
@@ -33,8 +34,16 @@ const App: React.FC = () => {
     }
   };
 
+  // Prevent hydration mismatch by only rendering once mounted on the client
+  if (!mounted) {
+    return null;
+  }
+
   return (
-    <div className={`${isDarkMode ? 'space-gradient' : 'bg-slate-50'} min-h-screen transition-colors duration-300 font-heebo overflow-x-hidden`}>
+    <div 
+      className={`${isDarkMode ? 'space-gradient' : 'bg-slate-50'} min-h-screen transition-colors duration-300 font-heebo overflow-x-hidden`}
+      suppressHydrationWarning
+    >
       <Layout 
         activeTab={activeTab} 
         setActiveTab={setActiveTab} 

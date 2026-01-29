@@ -1,6 +1,105 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { PLANETS, MOON_DATA } from '../constants';
 import { Planet } from '../types';
+
+const RoverSimulation: React.FC = () => {
+  const [pos, setPos] = useState({ x: 2, y: 2 });
+  const [log, setLog] = useState<string[]>(['מערכת הבקרה פעילה. מוכן לתנועה.']);
+  const [scanning, setScanning] = useState(false);
+
+  const gridSize = 5;
+  
+  const move = (dx: number, dy: number) => {
+    const newX = Math.max(0, Math.min(gridSize - 1, pos.x + dx));
+    const newY = Math.max(0, Math.min(gridSize - 1, pos.y + dy));
+    
+    if (newX !== pos.x || newY !== pos.y) {
+      setPos({ x: newX, y: newY });
+      addLog(`נע לכיוון (${newX}, ${newY})`);
+    } else {
+      addLog('מכשול זוהה! לא ניתן לנוע לכיוון זה.');
+    }
+  };
+
+  const addLog = (msg: string) => {
+    setLog(prev => [msg, ...prev].slice(0, 5));
+  };
+
+  const scanTerrain = () => {
+    setScanning(true);
+    setTimeout(() => {
+      const scans = [
+        'נמצאו עקבות של ברזל מחומצן',
+        'זוהה סלע סדימנטרי מעניין',
+        'רמת הקרינה תקינה',
+        'נמצא מכתש קטן בקרבת מקום',
+        'סריקה הושלמה: אין סימני חיים כרגע'
+      ];
+      addLog(scans[Math.floor(Math.random() * scans.length)]);
+      setScanning(false);
+    }, 1500);
+  };
+
+  return (
+    <div className="mt-12 p-6 md:p-8 bg-slate-900 border-2 border-red-900/50 rounded-3xl shadow-2xl relative overflow-hidden">
+      <div className="absolute top-0 right-0 p-4 opacity-10 text-8xl pointer-events-none">🚜</div>
+      <h3 className="text-2xl md:text-3xl font-black text-red-500 mb-6 flex items-center gap-3">
+        <span>🛰️</span> סימולטור רכב החלל "התמדה"
+      </h3>
+      
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
+        {/* Visual Grid Area */}
+        <div className="bg-orange-950/30 p-4 rounded-2xl border border-orange-900/50 aspect-square max-w-[350px] mx-auto w-full flex flex-col gap-1">
+          {Array.from({ length: gridSize }).map((_, r) => (
+            <div key={r} className="flex gap-1 flex-1">
+              {Array.from({ length: gridSize }).map((_, c) => (
+                <div 
+                  key={c} 
+                  className={`flex-1 rounded-lg flex items-center justify-center text-2xl transition-all duration-300 ${
+                    pos.x === c && pos.y === r 
+                      ? 'bg-red-500 shadow-[0_0_15px_rgba(239,68,68,0.6)] scale-105' 
+                      : 'bg-orange-900/20 border border-orange-900/10'
+                  }`}
+                >
+                  {pos.x === c && pos.y === r ? '🚜' : ''}
+                </div>
+              ))}
+            </div>
+          ))}
+        </div>
+
+        {/* Controls & Logs */}
+        <div className="space-y-6">
+          <div className="bg-black/40 p-4 rounded-xl border border-slate-700 h-40 overflow-y-auto no-scrollbar font-mono text-sm">
+            <div className="text-cyan-500 mb-2 font-bold underline">יומן משימה:</div>
+            {log.map((msg, i) => (
+              <div key={i} className={`mb-1 ${i === 0 ? 'text-white' : 'text-slate-500'}`}>
+                {i === 0 ? '> ' : '- '}{msg}
+              </div>
+            ))}
+            {scanning && <div className="text-orange-400 animate-pulse">סורק פני שטח...</div>}
+          </div>
+
+          <div className="grid grid-cols-3 gap-2 max-w-[200px] mx-auto">
+            <div></div>
+            <button onClick={() => move(0, -1)} className="p-4 bg-slate-800 hover:bg-red-600 rounded-xl transition-colors shadow-lg">⬆️</button>
+            <div></div>
+            <button onClick={() => move(-1, 0)} className="p-4 bg-slate-800 hover:bg-red-600 rounded-xl transition-colors shadow-lg">⬅️</button>
+            <button onClick={scanTerrain} disabled={scanning} className="p-4 bg-red-700 hover:bg-red-500 rounded-xl transition-colors shadow-lg flex items-center justify-center">
+              {scanning ? '⏳' : '🔍'}
+            </button>
+            <button onClick={() => move(1, 0)} className="p-4 bg-slate-800 hover:bg-red-600 rounded-xl transition-colors shadow-lg">➡️</button>
+            <div></div>
+            <button onClick={() => move(0, 1)} className="p-4 bg-slate-800 hover:bg-red-600 rounded-xl transition-colors shadow-lg">⬇️</button>
+            <div></div>
+          </div>
+          
+          <p className="text-center text-xs text-slate-500">השתמשו בחצים כדי לנוע על פני מאדים!</p>
+        </div>
+      </div>
+    </div>
+  );
+};
 
 const PlanetExplorer: React.FC = () => {
   const [selectedBody, setSelectedBody] = useState<Planet>(PLANETS[0]);
@@ -24,7 +123,6 @@ const PlanetExplorer: React.FC = () => {
       <div className="text-center mb-2 md:mb-4">
         <h2 className="text-3xl md:text-4xl font-black mb-4">חוקרים את השמיים</h2>
         
-        {/* View Mode Toggle */}
         <div className="inline-flex p-1 bg-slate-800 rounded-full border border-slate-700 mb-6">
           <button
             onClick={() => handleToggleMode('planets')}
@@ -126,6 +224,9 @@ const PlanetExplorer: React.FC = () => {
           </div>
         </div>
       </div>
+
+      {/* Conditional Rover Section for Mars */}
+      {selectedBody.id === 'mars' && <RoverSimulation />}
     </div>
   );
 };

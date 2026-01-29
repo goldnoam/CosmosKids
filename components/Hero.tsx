@@ -1,6 +1,4 @@
-
 import React, { useEffect, useState } from 'react';
-import { GoogleGenAI } from "@google/genai";
 
 interface HeroProps {
   onExplore: () => void;
@@ -15,50 +13,22 @@ const STATIC_FACTS = [
   "הידעת? מאדים הוא ביתו של ההר הגבוה ביותר במערכת השמש - אולימפוס מונס."
 ];
 
+const STATIC_IMAGES = [
+  "https://images.unsplash.com/photo-1446776811953-b23d57bd21aa?q=80&w=800",
+  "https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=800",
+  "https://images.unsplash.com/photo-1444703686981-a3abbc4d4fe3?q=80&w=800",
+  "https://images.unsplash.com/photo-1464802686167-b939a67a06a1?q=80&w=800"
+];
+
 const Hero: React.FC<HeroProps> = ({ onExplore }) => {
   const [fact, setFact] = useState<string>('');
-  const [imageUrl, setImageUrl] = useState<string | null>(null);
-  const [isGenerating, setIsGenerating] = useState<boolean>(false);
+  const [imageUrl, setImageUrl] = useState<string>(STATIC_IMAGES[0]);
 
   useEffect(() => {
-    const randomFact = STATIC_FACTS[Math.floor(Math.random() * STATIC_FACTS.length)];
-    setFact(randomFact);
-    generateImage(randomFact);
+    const randomIdx = Math.floor(Math.random() * STATIC_FACTS.length);
+    setFact(STATIC_FACTS[randomIdx]);
+    setImageUrl(STATIC_IMAGES[randomIdx % STATIC_IMAGES.length]);
   }, []);
-
-  const generateImage = async (factText: string) => {
-    setIsGenerating(true);
-    try {
-      const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
-      // Construct a prompt that ensures child-friendly and colorful output
-      const prompt = `A vibrant, colorful, and child-friendly digital illustration of the following space fact: "${factText}". The style should be whimsical, high-quality, and magical, suitable for a kids' astronomy website. No text in the image.`;
-      
-      const response = await ai.models.generateContent({
-        model: 'gemini-2.5-flash-image',
-        contents: {
-          parts: [{ text: prompt }]
-        },
-        config: {
-          imageConfig: {
-            aspectRatio: "16:9"
-          }
-        }
-      });
-
-      // Find the image part in the response
-      for (const part of response.candidates?.[0]?.content?.parts || []) {
-        if (part.inlineData) {
-          const base64Data = part.inlineData.data;
-          setImageUrl(`data:image/png;base64,${base64Data}`);
-          break;
-        }
-      }
-    } catch (error) {
-      console.error("Error generating space image:", error);
-    } finally {
-      setIsGenerating(false);
-    }
-  };
 
   return (
     <div className="flex flex-col items-center gap-8 md:gap-12 py-6 md:py-12 overflow-hidden">
@@ -105,22 +75,12 @@ const Hero: React.FC<HeroProps> = ({ onExplore }) => {
             </p>
           </div>
           <div className="w-full md:w-2/5 aspect-video md:aspect-square bg-slate-800 rounded-2xl overflow-hidden relative border border-slate-700">
-            {isGenerating ? (
-              <div className="absolute inset-0 flex flex-col items-center justify-center gap-3">
-                <div className="w-10 h-10 border-4 border-cyan-500/30 border-t-cyan-500 rounded-full animate-spin"></div>
-                <span className="text-xs text-slate-400 animate-pulse">מייצר תמונה בחלל...</span>
-              </div>
-            ) : imageUrl ? (
-              <img 
-                src={imageUrl} 
-                alt="עובדת חלל מאוירת" 
-                className="w-full h-full object-cover animate-fadeIn"
-              />
-            ) : (
-              <div className="absolute inset-0 flex items-center justify-center bg-slate-800 text-slate-600">
-                <span className="text-4xl">🌠</span>
-              </div>
-            )}
+            <img 
+              src={imageUrl} 
+              alt="נוף מהחלל" 
+              className="w-full h-full object-cover animate-fadeIn"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-slate-950/40 to-transparent"></div>
           </div>
         </div>
       </div>
