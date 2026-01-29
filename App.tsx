@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useLayoutEffect } from 'react';
 import Layout from './components/Layout';
 import Hero from './components/Hero';
 import PlanetExplorer from './components/PlanetExplorer';
@@ -7,17 +7,23 @@ import SpaceQuiz from './components/SpaceQuiz';
 const App: React.FC = () => {
   const [activeTab, setActiveTab] = useState<string>('home');
   const [isDarkMode, setIsDarkMode] = useState<boolean>(true);
-  const [mounted, setMounted] = useState(false);
+  const [isClient, setIsClient] = useState(false);
+
+  // useLayoutEffect or useEffect to mark the transition to client-side
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
 
   useEffect(() => {
-    setMounted(true);
+    if (!isClient) return;
+    
     // Sync theme with document class for Tailwind
     if (isDarkMode) {
       document.documentElement.classList.add('dark');
     } else {
       document.documentElement.classList.remove('dark');
     }
-  }, [isDarkMode]);
+  }, [isDarkMode, isClient]);
 
   const toggleTheme = () => setIsDarkMode(!isDarkMode);
 
@@ -34,15 +40,14 @@ const App: React.FC = () => {
     }
   };
 
-  // Prevent hydration mismatch by only rendering once mounted on the client
-  if (!mounted) {
-    return null;
+  // If we haven't mounted yet, render an empty state that matches the index.html's #root
+  if (!isClient) {
+    return <div className="min-h-screen bg-slate-950"></div>;
   }
 
   return (
     <div 
       className={`${isDarkMode ? 'space-gradient' : 'bg-slate-50'} min-h-screen transition-colors duration-300 font-heebo overflow-x-hidden`}
-      suppressHydrationWarning
     >
       <Layout 
         activeTab={activeTab} 
