@@ -11,7 +11,7 @@ export const PLANETS: Planet[] = [
     color: 'bg-gray-400',
     distanceFromSun: '58 מיליון ק"מ',
     size: '4,879 ק"מ',
-    image: 'https://picsum.photos/seed/mercury/400/400'
+    image: 'https://images.unsplash.com/photo-1614728894747-a83421e2b9c9?q=80&w=600&auto=format&fit=crop'
   },
   {
     id: 'venus',
@@ -22,7 +22,7 @@ export const PLANETS: Planet[] = [
     color: 'bg-orange-300',
     distanceFromSun: '108 מיליון ק"מ',
     size: '12,104 ק"מ',
-    image: 'https://picsum.photos/seed/venus/400/400'
+    image: 'https://images.unsplash.com/photo-1614313913007-2b4ae8ce32d6?q=80&w=600&auto=format&fit=crop'
   },
   {
     id: 'earth',
@@ -33,7 +33,7 @@ export const PLANETS: Planet[] = [
     color: 'bg-blue-500',
     distanceFromSun: '150 מיליון ק"מ',
     size: '12,742 ק"מ',
-    image: 'https://picsum.photos/seed/earth/400/400'
+    image: 'https://images.unsplash.com/photo-1614730321146-b6fa6a46bcb4?q=80&w=600&auto=format&fit=crop'
   },
   {
     id: 'mars',
@@ -44,7 +44,7 @@ export const PLANETS: Planet[] = [
     color: 'bg-red-600',
     distanceFromSun: '228 מיליון ק"מ',
     size: '6,779 ק"מ',
-    image: 'https://picsum.photos/seed/mars/400/400'
+    image: 'https://images.unsplash.com/photo-1614724723154-43d359d0ca09?q=80&w=600&auto=format&fit=crop'
   },
   {
     id: 'jupiter',
@@ -55,7 +55,7 @@ export const PLANETS: Planet[] = [
     color: 'bg-amber-200',
     distanceFromSun: '778 מיליון ק"מ',
     size: '139,820 ק"מ',
-    image: 'https://picsum.photos/seed/jupiter/400/400'
+    image: 'https://images.unsplash.com/photo-1630839437035-dac17da580d0?q=80&w=600&auto=format&fit=crop'
   },
   {
     id: 'saturn',
@@ -66,7 +66,7 @@ export const PLANETS: Planet[] = [
     color: 'bg-yellow-100',
     distanceFromSun: '1.4 מיליארד ק"מ',
     size: '116,460 ק"מ',
-    image: 'https://picsum.photos/seed/saturn/400/400'
+    image: 'https://images.unsplash.com/photo-1614732414444-096e5f1122d5?q=80&w=600&auto=format&fit=crop'
   },
   {
     id: 'uranus',
@@ -77,7 +77,7 @@ export const PLANETS: Planet[] = [
     color: 'bg-cyan-200',
     distanceFromSun: '2.9 מיליארד ק"מ',
     size: '50,724 ק"מ',
-    image: 'https://picsum.photos/seed/uranus/400/400'
+    image: 'https://images.unsplash.com/photo-1614732484003-ef9881555dc3?q=80&w=600&auto=format&fit=crop'
   },
   {
     id: 'neptune',
@@ -88,13 +88,13 @@ export const PLANETS: Planet[] = [
     color: 'bg-blue-700',
     distanceFromSun: '4.5 מיליארד ק"מ',
     size: '49,244 ק"מ',
-    image: 'https://picsum.photos/seed/neptune/400/400'
+    image: 'https://images.unsplash.com/photo-1614314107768-6018061b5b72?q=80&w=600&auto=format&fit=crop'
   }
 ];
 
 export const QUIZ_QUESTIONS: QuizQuestion[] = [
   {
-    question: "מיו כוכב הלכת הגדול ביותר במערכת השמש?",
+    question: "מיהו כוכב הלכת הגדול ביותר במערכת השמש?",
     options: ["מאדים", "צדק", "שבתאי", "כדור הארץ"],
     correctAnswer: 1
   },

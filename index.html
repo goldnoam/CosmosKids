@@ -1,29 +1,35 @@
-
 <!DOCTYPE html>
-<html lang="he" dir="rtl">
+<html lang="he" dir="rtl" class="dark">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>קוסמוס קידס - חוקרים את היקום</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- SEO Meta Tags -->
+    <title>קוסמוס קידס - חוקרים את היקום | אסטרונומיה לילדים</title>
+    <meta name="description" content="אתר אסטרונומיה אינטראקטיבי וצבעוני לילדים ונוער. למדו על כוכבי הלכת, מערכת השמש וסודות הגלקסיה." />
+    <meta name="keywords" content="אסטרונומיה, ילדים, חלל, כוכבי לכת, מערכת השמש, מדע לילדים, קוסמוס" />
+    <meta name="author" content="Noam Gold AI" />
+    <meta name="robots" content="index, follow" />
+
+    <!-- Open Graph / Social Media -->
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="קוסמוס קידס - חוקרים את היקום" />
+    <meta property="og:description" content="מסע מרתק בין כוכבים לילדים ונוער." />
+    <meta property="og:image" content="https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=1200" />
+
+    <!-- Favicon -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🚀</text></svg>">
+
+    <!-- Google Adsense Placeholder -->
+    <!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1234567890123456" crossorigin="anonymous"></script> -->
+
     <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;700;900&family=Assistant:wght@300;400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="index.css">
     <style>
       body {
         font-family: 'Heebo', 'Assistant', sans-serif;
-        background-color: #020617;
-        color: white;
         margin: 0;
         overflow-x: hidden;
-      }
-      .space-gradient {
-        background: radial-gradient(circle at center, #1e1b4b 0%, #020617 100%);
-      }
-      @keyframes float {
-        0%, 100% { transform: translateY(0px); }
-        50% { transform: translateY(-20px); }
-      }
-      .float-animation {
-        animation: float 6s ease-in-out infinite;
       }
       .stars-container {
         position: fixed;
@@ -35,22 +41,21 @@
         pointer-events: none;
       }
     </style>
-  <script type="importmap">
+    <script type="importmap">
 {
   "imports": {
-    "@google/genai": "https://esm.sh/@google/genai@^1.38.0",
     "react-dom/": "https://esm.sh/react-dom@^19.2.4/",
     "react/": "https://esm.sh/react@^19.2.4/",
-    "react": "https://esm.sh/react@^19.2.4"
+    "react": "https://esm.sh/react@^19.2.4",
+    "@google/genai": "https://esm.sh/@google/genai@^1.38.0"
   }
 }
 </script>
-</head>
-  <body>
+  </head>
+  <body class="bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-white transition-colors duration-300">
     <div id="root"></div>
-    <div class="stars-container" id="stars"></div>
+    <div class="stars-container opacity-30 dark:opacity-100" id="stars"></div>
     <script>
-      // Simple background stars generator
       const starsContainer = document.getElementById('stars');
       for (let i = 0; i < 150; i++) {
         const star = document.createElement('div');
@@ -58,7 +63,7 @@
         star.style.position = 'absolute';
         star.style.width = `${size}px`;
         star.style.height = `${size}px`;
-        star.style.backgroundColor = 'white';
+        star.style.backgroundColor = 'currentColor';
         star.style.top = `${Math.random() * 100}%`;
         star.style.left = `${Math.random() * 100}%`;
         star.style.opacity = Math.random();

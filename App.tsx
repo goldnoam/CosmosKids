@@ -1,13 +1,24 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Layout from './components/Layout';
 import Hero from './components/Hero';
 import PlanetExplorer from './components/PlanetExplorer';
-import SpaceChat from './components/SpaceChat';
 import SpaceQuiz from './components/SpaceQuiz';
 
 const App: React.FC = () => {
   const [activeTab, setActiveTab] = useState<string>('home');
+  const [isDarkMode, setIsDarkMode] = useState<boolean>(true);
+
+  useEffect(() => {
+    // Sync theme with document class for Tailwind
+    if (isDarkMode) {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
+  }, [isDarkMode]);
+
+  const toggleTheme = () => setIsDarkMode(!isDarkMode);
 
   const renderContent = () => {
     switch (activeTab) {
@@ -15,8 +26,6 @@ const App: React.FC = () => {
         return <Hero onExplore={() => setActiveTab('planets')} />;
       case 'planets':
         return <PlanetExplorer />;
-      case 'chat':
-        return <SpaceChat />;
       case 'quiz':
         return <SpaceQuiz />;
       default:
@@ -25,9 +34,16 @@ const App: React.FC = () => {
   };
 
   return (
-    <div className="space-gradient min-h-screen text-white">
-      <Layout activeTab={activeTab} setActiveTab={setActiveTab}>
-        {renderContent()}
+    <div className={`${isDarkMode ? 'space-gradient' : 'bg-slate-50'} min-h-screen transition-colors duration-300 font-heebo overflow-x-hidden`}>
+      <Layout 
+        activeTab={activeTab} 
+        setActiveTab={setActiveTab} 
+        isDarkMode={isDarkMode} 
+        toggleTheme={toggleTheme}
+      >
+        <div className="animate-fadeIn">
+          {renderContent()}
+        </div>
       </Layout>
     </div>
   );

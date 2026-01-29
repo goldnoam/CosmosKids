@@ -1,22 +1,19 @@
 {
-  "name": "קוסמוס-קידס---הרפתקה-בחלל",
-  "private": true,
-  "version": "0.0.0",
+  "name": "astronomy-kids-hub",
+  "version": "1.0.0",
+  "description": "Astronomy exploration site for kids and teens",
   "type": "module",
-  "scripts": {
-    "dev": "vite",
-    "build": "vite build",
-    "preview": "vite preview"
-  },
   "dependencies": {
-    "@google/genai": "^1.38.0",
+    "react": "^19.2.4",
     "react-dom": "^19.2.4",
-    "react": "^19.2.4"
+    "@google/genai": "^1.38.0"
   },
   "devDependencies": {
-    "@types/node": "^22.14.0",
-    "@vitejs/plugin-react": "^5.0.0",
-    "typescript": "~5.8.2",
-    "vite": "^6.2.0"
+    "tailwindcss": "^3.4.1",
+    "autoprefixer": "^10.4.17",
+    "postcss": "^8.4.35"
+  },
+  "scripts": {
+    "build": "tailwindcss -i ./index.css -o ./dist/output.css --minify"
   }
 }
