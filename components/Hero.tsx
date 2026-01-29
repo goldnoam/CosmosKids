@@ -1,4 +1,6 @@
+
 import React, { useEffect, useState } from 'react';
+import { GoogleGenAI } from "@google/genai";
 
 interface HeroProps {
   onExplore: () => void;
@@ -15,12 +17,48 @@ const STATIC_FACTS = [
 
 const Hero: React.FC<HeroProps> = ({ onExplore }) => {
   const [fact, setFact] = useState<string>('');
+  const [imageUrl, setImageUrl] = useState<string | null>(null);
+  const [isGenerating, setIsGenerating] = useState<boolean>(false);
 
   useEffect(() => {
-    // Select a random fact from the static list
     const randomFact = STATIC_FACTS[Math.floor(Math.random() * STATIC_FACTS.length)];
     setFact(randomFact);
+    generateImage(randomFact);
   }, []);
+
+  const generateImage = async (factText: string) => {
+    setIsGenerating(true);
+    try {
+      const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+      // Construct a prompt that ensures child-friendly and colorful output
+      const prompt = `A vibrant, colorful, and child-friendly digital illustration of the following space fact: "${factText}". The style should be whimsical, high-quality, and magical, suitable for a kids' astronomy website. No text in the image.`;
+      
+      const response = await ai.models.generateContent({
+        model: 'gemini-2.5-flash-image',
+        contents: {
+          parts: [{ text: prompt }]
+        },
+        config: {
+          imageConfig: {
+            aspectRatio: "16:9"
+          }
+        }
+      });
+
+      // Find the image part in the response
+      for (const part of response.candidates?.[0]?.content?.parts || []) {
+        if (part.inlineData) {
+          const base64Data = part.inlineData.data;
+          setImageUrl(`data:image/png;base64,${base64Data}`);
+          break;
+        }
+      }
+    } catch (error) {
+      console.error("Error generating space image:", error);
+    } finally {
+      setIsGenerating(false);
+    }
+  };
 
   return (
     <div className="flex flex-col items-center gap-8 md:gap-12 py-6 md:py-12 overflow-hidden">
@@ -46,7 +84,7 @@ const Hero: React.FC<HeroProps> = ({ onExplore }) => {
         <div className="flex flex-wrap justify-center gap-4 px-4">
           <button 
             onClick={onExplore}
-            className="group relative bg-cyan-600 hover:bg-cyan-500 text-white text-lg md:text-xl font-bold px-8 md:px-10 py-4 md:py-5 rounded-full transition-all transform hover:scale-110 active:scale-95 shadow-xl shadow-cyan-900/40 hover:shadow-cyan-400/30 hover:brightness-110 overflow-hidden"
+            className="group relative bg-cyan-600 hover:bg-cyan-500 text-white text-lg md:text-xl font-bold px-8 md:px-10 py-4 md:py-5 rounded-full transition-all transform hover:scale-105 active:scale-95 shadow-xl shadow-cyan-900/40 hover:shadow-cyan-400/60 hover:brightness-125 overflow-hidden ring-0 hover:ring-2 ring-white/20"
           >
             <span className="relative z-10 flex items-center gap-2">
               בואו נצא לדרך! 🪐
@@ -56,13 +94,35 @@ const Hero: React.FC<HeroProps> = ({ onExplore }) => {
         </div>
       </div>
 
-      <div className="w-full max-w-4xl bg-slate-900/60 backdrop-blur-md p-6 md:p-8 rounded-3xl border border-slate-700/50 shadow-2xl mt-6 md:mt-10 mx-auto">
-        <h3 className="text-cyan-400 font-bold mb-3 md:mb-4 flex items-center gap-2 text-lg md:text-xl">
-          <span>🚀</span> עובדת היום בחלל:
-        </h3>
-        <p className="text-xl md:text-2xl text-white font-medium leading-relaxed">
-          {fact}
-        </p>
+      <div className="w-full max-w-4xl bg-slate-900/60 backdrop-blur-md p-6 md:p-8 rounded-3xl border border-slate-700/50 shadow-2xl mt-6 md:mt-10 mx-auto overflow-hidden">
+        <div className="flex flex-col md:flex-row gap-8 items-center">
+          <div className="flex-1 space-y-4">
+            <h3 className="text-cyan-400 font-bold flex items-center gap-2 text-lg md:text-xl">
+              <span>🚀</span> עובדת היום בחלל:
+            </h3>
+            <p className="text-xl md:text-2xl text-white font-medium leading-relaxed">
+              {fact}
+            </p>
+          </div>
+          <div className="w-full md:w-2/5 aspect-video md:aspect-square bg-slate-800 rounded-2xl overflow-hidden relative border border-slate-700">
+            {isGenerating ? (
+              <div className="absolute inset-0 flex flex-col items-center justify-center gap-3">
+                <div className="w-10 h-10 border-4 border-cyan-500/30 border-t-cyan-500 rounded-full animate-spin"></div>
+                <span className="text-xs text-slate-400 animate-pulse">מייצר תמונה בחלל...</span>
+              </div>
+            ) : imageUrl ? (
+              <img 
+                src={imageUrl} 
+                alt="עובדת חלל מאוירת" 
+                className="w-full h-full object-cover animate-fadeIn"
+              />
+            ) : (
+              <div className="absolute inset-0 flex items-center justify-center bg-slate-800 text-slate-600">
+                <span className="text-4xl">🌠</span>
+              </div>
+            )}
+          </div>
+        </div>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6 w-full mt-6 md:mt-8 px-2">
