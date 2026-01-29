@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="he" dir="rtl" class="dark">
+<html lang="he" dir="rtl" class="dark" suppressHydrationWarning>
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -56,56 +56,48 @@
     <script type="importmap">
 {
   "imports": {
-    "react": "https://esm.sh/react@19.0.0",
-    "react/": "https://esm.sh/react@19.0.0/",
-    "react-dom": "https://esm.sh/react-dom@19.0.0",
-    "react-dom/": "https://esm.sh/react-dom@19.0.0/",
-    "react-dom/client": "https://esm.sh/react-dom@19.0.0/client"
+    "react": "https://esm.sh/react@19.0.0?bundle",
+    "react-dom": "https://esm.sh/react-dom@19.0.0?bundle",
+    "react-dom/client": "https://esm.sh/react-dom@19.0.0/client?bundle",
+    "react-dom/": "https://esm.sh/react-dom@^19.2.4/",
+    "react/": "https://esm.sh/react@^19.2.4/"
   }
 }
 </script>
   </head>
-  <body class="bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-white transition-colors duration-300">
+  <body class="bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-white transition-colors duration-300" suppressHydrationWarning>
     <div id="root"></div>
     <div class="stars-container opacity-30 dark:opacity-100" id="stars"></div>
     <script>
-      // We wrap the star creation in a check to ensure it doesn't interfere with React hydration if it ever reaches into the body
-      window.addEventListener('DOMContentLoaded', () => {
+      window.addEventListener('load', () => {
         const starsContainer = document.getElementById('stars');
         if (starsContainer) {
           const createStars = (count, layerClass, baseSize, baseDuration) => {
+            const fragment = document.createDocumentFragment();
             for (let i = 0; i < count; i++) {
               const star = document.createElement('div');
               star.className = `star ${layerClass}`;
               const size = Math.random() * baseSize + 0.3;
               const x = Math.random() * 110 - 5;
               const y = Math.random() * 110 - 5;
-              
               star.style.width = `${size}px`;
               star.style.height = `${size}px`;
               star.style.left = `${x}%`;
               star.style.top = `${y}%`;
-              
               const twinkleDuration = baseDuration + Math.random() * 4;
               const driftDuration = 50 + Math.random() * 100;
               const delay = Math.random() * -20;
-              
-              star.style.animation = `
-                twinkle ${twinkleDuration}s infinite ease-in-out ${delay}s,
-                drift ${driftDuration}s infinite linear alternate
-              `;
-              
+              star.style.animation = `twinkle ${twinkleDuration}s infinite ease-in-out ${delay}s, drift ${driftDuration}s infinite linear alternate`;
               if (Math.random() > 0.8) {
                 star.style.boxShadow = `0 0 ${size * 5}px ${size}px rgba(255, 255, 255, 0.4)`;
               }
-              
-              starsContainer.appendChild(star);
+              fragment.appendChild(star);
             }
+            starsContainer.appendChild(fragment);
           };
-
-          createStars(120, 'layer-1', 0.8, 4);
-          createStars(60, 'layer-2', 1.5, 6);
-          createStars(15, 'layer-3', 2.5, 8);
+          createStars(100, 'layer-1', 0.8, 4);
+          createStars(50, 'layer-2', 1.5, 6);
+          createStars(10, 'layer-3', 2.5, 8);
         }
       });
     </script>

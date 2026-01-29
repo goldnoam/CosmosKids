@@ -7,23 +7,20 @@ import SpaceQuiz from './components/SpaceQuiz';
 const App: React.FC = () => {
   const [activeTab, setActiveTab] = useState<string>('home');
   const [isDarkMode, setIsDarkMode] = useState<boolean>(true);
-  const [isClient, setIsClient] = useState(false);
+  const [isMounted, setIsMounted] = useState(false);
 
-  // Sync isClient on mount
   useEffect(() => {
-    setIsClient(true);
+    setIsMounted(true);
   }, []);
 
-  // Sync theme
   useEffect(() => {
-    if (!isClient) return;
-    
+    if (!isMounted) return;
     if (isDarkMode) {
       document.documentElement.classList.add('dark');
     } else {
       document.documentElement.classList.remove('dark');
     }
-  }, [isDarkMode, isClient]);
+  }, [isDarkMode, isMounted]);
 
   const toggleTheme = () => setIsDarkMode(!isDarkMode);
 
@@ -41,8 +38,8 @@ const App: React.FC = () => {
   };
 
   // MUST return null on the first render to match the empty <div id="root"></div> in index.html
-  // This prevents hydration mismatch errors in production builds.
-  if (!isClient) {
+  // This prevents hydration mismatch errors (like Error 418) in production builds.
+  if (!isMounted) {
     return null;
   }
 
