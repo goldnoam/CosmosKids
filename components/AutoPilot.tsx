@@ -1,11 +1,11 @@
-
 import React, { useState, useEffect, useRef } from 'react';
-import { PLANETS } from '../constants';
+import { ALL_DESTINATIONS } from '../constants';
 import { Planet } from '../types';
 
 const AutoPilot: React.FC = () => {
   const [destination, setDestination] = useState<Planet | null>(null);
   const [isFlying, setIsFlying] = useState(false);
+  const [showConfirmation, setShowConfirmation] = useState(false);
   const [progress, setProgress] = useState(0);
   const [logs, setLogs] = useState<string[]>(['מערכת מוכנה לשיגור. בחר יעד.']);
   const [coordinates, setCoordinates] = useState({ ra: '00h 00m 00s', dec: '+00° 00\' 00"' });
@@ -26,9 +26,15 @@ const AutoPilot: React.FC = () => {
     };
   };
 
-  const handleLaunch = () => {
+  const handleLaunchAttempt = () => {
+    if (!destination) return;
+    setShowConfirmation(true);
+  };
+
+  const startFlight = () => {
     if (!destination) return;
     
+    setShowConfirmation(false);
     setIsFlying(true);
     setProgress(0);
     const coords = generateCoordinates(destination);
@@ -94,30 +100,30 @@ const AutoPilot: React.FC = () => {
       </div>
 
       {!isFlying && progress < 100 ? (
-        <div className="bg-slate-900/60 p-6 md:p-10 rounded-3xl border border-slate-700 backdrop-blur-md shadow-2xl">
+        <div className="bg-slate-900/60 p-6 md:p-10 rounded-3xl border border-slate-700 backdrop-blur-md shadow-2xl relative">
           <h3 className="text-xl font-bold mb-6 text-cyan-400">בחר יעד לטיסה:</h3>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            {PLANETS.map((planet) => (
+          <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
+            {ALL_DESTINATIONS.map((planet) => (
               <button
                 key={planet.id}
                 onClick={() => setDestination(planet)}
-                className={`p-4 rounded-2xl border-2 transition-all flex flex-col items-center gap-2 group ${
+                className={`p-3 rounded-2xl border-2 transition-all flex flex-col items-center gap-2 group ${
                   destination?.id === planet.id 
                     ? 'border-cyan-500 bg-cyan-900/20 shadow-lg shadow-cyan-900/40' 
                     : 'border-slate-700 bg-slate-800/50 hover:border-slate-500'
                 }`}
               >
-                <div className={`w-12 h-12 rounded-full ${planet.color} overflow-hidden`}>
+                <div className={`w-10 h-10 rounded-full ${planet.color} overflow-hidden flex items-center justify-center`}>
                    <img src={planet.image} alt="" className="w-full h-full object-cover opacity-50 group-hover:opacity-100 transition-opacity" />
                 </div>
-                <span className="font-bold">{planet.name}</span>
+                <span className="font-bold text-xs truncate w-full text-center">{planet.name}</span>
               </button>
             ))}
           </div>
 
           <button
             disabled={!destination}
-            onClick={handleLaunch}
+            onClick={handleLaunchAttempt}
             className={`mt-10 w-full py-5 rounded-2xl font-black text-2xl transition-all shadow-xl ${
               destination 
                 ? 'bg-gradient-to-r from-cyan-600 to-purple-600 hover:scale-[1.02] active:scale-[0.98]' 
@@ -126,6 +132,34 @@ const AutoPilot: React.FC = () => {
           >
             {destination ? `שגר חללית ל${destination.name}! 🚀` : 'בחר יעד קודם'}
           </button>
+
+          {/* Confirmation Dialog Overlay */}
+          {showConfirmation && (
+            <div className="absolute inset-0 z-50 flex items-center justify-center p-4">
+              <div className="absolute inset-0 bg-slate-950/80 backdrop-blur-sm rounded-3xl"></div>
+              <div className="relative z-10 bg-slate-900 border-2 border-cyan-500 p-8 rounded-3xl shadow-[0_0_50px_rgba(6,182,212,0.3)] max-w-sm w-full text-center animate-fadeIn">
+                <div className="text-5xl mb-4">🛸</div>
+                <h4 className="text-xl font-black text-white mb-2">אישור שיגור</h4>
+                <p className="text-slate-300 mb-8">
+                  האם אתם בטוחים שברצונכם לטוס ל<span className="text-cyan-400 font-bold">{destination?.name}</span>?
+                </p>
+                <div className="flex flex-col gap-3">
+                  <button
+                    onClick={startFlight}
+                    className="w-full py-3 bg-cyan-600 hover:bg-cyan-500 text-white font-bold rounded-xl transition-all shadow-lg shadow-cyan-900/40"
+                  >
+                    כן, שגר! 🚀
+                  </button>
+                  <button
+                    onClick={() => setShowConfirmation(false)}
+                    className="w-full py-3 bg-slate-800 hover:bg-slate-700 text-slate-300 font-bold rounded-xl transition-all border border-slate-700"
+                  >
+                    ביטול
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
       ) : (
         <div className="bg-black p-6 md:p-10 rounded-3xl border-4 border-slate-800 shadow-[0_0_50px_rgba(0,0,0,0.5)] relative overflow-hidden">

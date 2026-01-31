@@ -103,6 +103,58 @@ export const PLANETS: Planet[] = [
   }
 ];
 
+export const DWARF_PLANETS: Planet[] = [
+  {
+    id: 'pluto',
+    name: 'פלוטו',
+    englishName: 'Pluto',
+    description: 'פעם נחשב לכוכב הלכת התשיעי, כיום הוא מוגדר ככוכב לכת ננסי בחגורת קויפר הקפואה.',
+    funFact: 'פלוטו קטן יותר מהירח של כדור הארץ!',
+    color: 'bg-stone-400',
+    distanceFromSun: '5.9 מיליארד ק"מ',
+    size: '2,376 ק"מ',
+    image: 'https://images.unsplash.com/photo-1614728423169-3f65fd722b7e?q=80&w=600&auto=format&fit=crop'
+  },
+  {
+    id: 'ceres',
+    name: 'צרס',
+    englishName: 'Ceres',
+    description: 'כוכב הלכת הננסי הקרוב ביותר לשמש, נמצא בחגורת האסטרואידים בין מאדים לצדק.',
+    funFact: 'צרס מהווה כרבע מהמסה הכוללת של כל חגורת האסטרואידים!',
+    color: 'bg-slate-500',
+    distanceFromSun: '414 מיליון ק"מ',
+    size: '940 ק"מ',
+    image: 'https://images.unsplash.com/photo-1516339901601-2e1b62dc0c45?q=80&w=600&auto=format&fit=crop'
+  }
+];
+
+export const FAMOUS_MOONS: Planet[] = [
+  {
+    id: 'titan',
+    name: 'טיטאן',
+    englishName: 'Titan',
+    description: 'הירח הגדול ביותר של שבתאי והמקום היחיד מלבד כדור הארץ שיש בו אגמים ונהרות על פני השטח.',
+    funFact: 'האטמוספירה של טיטאן כל כך סמיכה, שאם הייתם מחברים לעצמכם כנפיים הייתם יכולים לעוף!',
+    color: 'bg-yellow-600',
+    distanceFromSun: '1.4 מיליארד ק"מ',
+    size: '5,150 ק"מ',
+    image: 'https://images.unsplash.com/photo-1614314107768-6018061b5b72?q=80&w=600&auto=format&fit=crop'
+  },
+  {
+    id: 'europa',
+    name: 'אירופה',
+    englishName: 'Europa',
+    description: 'ירח של צדק המכוסה בשכבת קרח עבה, שמתחתיה מסתתר אוקיינוס מים נוזליים.',
+    funFact: 'מדענים חושבים שבאירופה יש פי 2 יותר מים מאשר בכל כדור הארץ!',
+    color: 'bg-blue-200',
+    distanceFromSun: '778 מיליון ק"מ',
+    size: '3,121 ק"מ',
+    image: 'https://images.unsplash.com/photo-1614732484003-ef9881555dc3?q=80&w=600&auto=format&fit=crop'
+  }
+];
+
+export const ALL_DESTINATIONS: Planet[] = [...PLANETS, ...DWARF_PLANETS, ...FAMOUS_MOONS];
+
 export const QUIZ_QUESTIONS: QuizQuestion[] = [
   {
     question: "מיהו כוכב הלכת הגדול ביותר במערכת השמש?",
