@@ -117,12 +117,33 @@
 </script>
 
     <script>
+      // Enhanced Production Error Handling
       window.onerror = function(msg, url, lineNo, columnNo, error) {
+        console.error('Global Error:', msg, error);
         const root = document.getElementById('root');
-        if (root && root.innerHTML.includes('טוען')) {
-          root.innerHTML = '<div class="text-center p-8"><div class="text-4xl mb-4">🛸</div><h1 class="text-2xl font-bold mb-2">אופס! משהו השתבש בשיגור</h1><p class="text-slate-500">נסו לרענן את הדף או לבדוק את החיבור לאינטרנט.</p></div>';
+        if (root && (root.innerHTML.includes('טוען') || root.innerHTML.trim() === '')) {
+          root.innerHTML = `
+            <div class="text-center p-8 bg-slate-900 text-white rounded-3xl border border-red-500 max-w-md mx-auto mt-20 shadow-2xl animate-fadeIn">
+              <div class="text-6xl mb-4">☄️</div>
+              <h1 class="text-2xl font-black mb-4">תקלה במערכות הניווט</h1>
+              <p class="text-slate-400 mb-6 leading-relaxed">
+                משהו השתבש בטעינת היקום. נראה שיש התנגשות בין גלקסיות בגרסת הקוד.
+              </p>
+              <div class="bg-black/50 p-3 rounded-lg text-left font-mono text-xs text-red-400 mb-6 overflow-auto max-h-32">
+                ${msg}
+              </div>
+              <button onclick="window.location.reload()" class="bg-cyan-600 hover:bg-cyan-500 px-6 py-2 rounded-full font-bold transition-all">
+                ניסיון שיגור מחודש 🚀
+              </button>
+            </div>
+          `;
         }
         return false;
+      };
+
+      // Catch unhandled promise rejections
+      window.onunhandledrejection = function(event) {
+        console.error('Unhandled Promise Rejection:', event.reason);
       };
     </script>
   </head>
@@ -130,7 +151,7 @@
     <div id="root" class="min-h-screen flex items-center justify-center">
       <div class="text-center">
         <div class="text-4xl mb-4 animate-bounce">🚀</div>
-        <p class="text-slate-500">טוען את היקום...</p>
+        <p class="text-slate-500 font-bold">מכין את החללית לשיגור...</p>
       </div>
     </div>
     <div class="stars-container opacity-30 dark:opacity-100" id="stars"></div>
@@ -167,6 +188,6 @@
         }
       });
     </script>
-    <script type="module" src="./index.tsx"></script>
+    <script type="module" src="index.tsx"></script>
   </body>
 </html>

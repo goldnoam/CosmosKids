@@ -1,10 +1,9 @@
-
 import React, { useState, useEffect } from 'react';
-import Layout from './components/Layout';
-import Hero from './components/Hero';
-import PlanetExplorer from './components/PlanetExplorer';
-import SpaceQuiz from './components/SpaceQuiz';
-import AutoPilot from './components/AutoPilot';
+import Layout from './components/Layout.tsx';
+import Hero from './components/Hero.tsx';
+import PlanetExplorer from './components/PlanetExplorer.tsx';
+import SpaceQuiz from './components/SpaceQuiz.tsx';
+import AutoPilot from './components/AutoPilot.tsx';
 
 const App: React.FC = () => {
   const [activeTab, setActiveTab] = useState<string>('home');
