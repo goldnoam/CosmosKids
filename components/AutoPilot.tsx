@@ -45,6 +45,17 @@ const AutoPilot: React.FC = () => {
   
   const timerRef = useRef<number | null>(null);
 
+  // Derive speed from progress for visualization
+  const getSpeed = (p: number, failed: boolean) => {
+    if (failed || p === 0 || p >= 100 || isPaused) return 0;
+    const maxSpeed = 28440; // km/s
+    if (p < 30) return (p / 30) * maxSpeed; // Acceleration
+    if (p < 80) return maxSpeed + (Math.sin(p * 10) * 150); // Cruise with jitter
+    return Math.max(0, maxSpeed * (1 - (p - 80) / 20)); // Deceleration
+  };
+
+  const currentSpeed = getSpeed(progress, isFailed);
+
   const generateCoordinates = (planet: Planet) => {
     const raH = Math.floor(Math.random() * 24).toString().padStart(2, '0');
     const raM = Math.floor(Math.random() * 60).toString().padStart(2, '0');
@@ -82,7 +93,7 @@ const AutoPilot: React.FC = () => {
       setLogs(prev => ['מפעיל מערכות גיבוי... חוזר למסלול.', ...prev].slice(0, 8));
     }
 
-    const duration = 8000;
+    const duration = 10000; // Increased duration slightly for better visualization
     const interval = 50;
     const steps = duration / interval;
     let currentStep = Math.floor((progress / 100) * steps);
@@ -256,14 +267,34 @@ const AutoPilot: React.FC = () => {
                 <div className="text-xs text-cyan-500 font-mono mb-1 uppercase tracking-widest">Target Status</div>
                 <h3 className="text-3xl font-black text-white">{destination?.name} <span className="text-slate-500 text-lg">({destination?.englishName})</span></h3>
               </div>
-              <div className="bg-slate-950 p-4 rounded-xl border border-slate-800 font-mono">
-                <div className="text-[10px] text-slate-500 mb-1">CELESTIAL COORDINATES</div>
-                <div className="text-cyan-400 text-sm">RA: {coordinates.ra}</div>
-                <div className="text-cyan-400 text-sm">DEC: {coordinates.dec}</div>
+              <div className="flex gap-4">
+                <div className="bg-slate-950 p-4 rounded-xl border border-slate-800 font-mono text-center min-w-[120px]">
+                  <div className="text-[10px] text-slate-500 mb-1 uppercase">Velocity (km/s)</div>
+                  <div className={`text-2xl font-black ${isFailed ? 'text-red-500' : 'text-cyan-400'} tabular-nums`}>
+                    {Math.round(currentSpeed).toLocaleString()}
+                  </div>
+                </div>
+                <div className="bg-slate-950 p-4 rounded-xl border border-slate-800 font-mono hidden sm:block">
+                  <div className="text-[10px] text-slate-500 mb-1">CELESTIAL COORDINATES</div>
+                  <div className="text-cyan-400 text-sm">RA: {coordinates.ra}</div>
+                  <div className="text-cyan-400 text-sm">DEC: {coordinates.dec}</div>
+                </div>
               </div>
             </div>
 
             <div className="h-64 md:h-80 w-full bg-slate-950 rounded-2xl border border-slate-800 relative overflow-hidden flex items-center justify-center">
+              {/* Speedometer Gauge Overlay */}
+              <div className="absolute left-6 top-1/2 -translate-y-1/2 flex flex-col items-center gap-2 z-20">
+                <div className="text-[8px] text-slate-500 font-mono font-black uppercase vertical-text">Thrust</div>
+                <div className="w-3 h-40 bg-slate-800 rounded-full border border-slate-700 overflow-hidden flex flex-col justify-end">
+                  <div 
+                    className={`w-full transition-all duration-300 ease-out shadow-[0_0_10px_rgba(6,182,212,0.5)] ${isFailed ? 'bg-red-600' : 'bg-gradient-to-t from-cyan-600 to-cyan-300'}`}
+                    style={{ height: `${(currentSpeed / 28500) * 100}%` }}
+                  ></div>
+                </div>
+                <div className="text-[8px] text-slate-400 font-mono">{Math.round((currentSpeed / 28500) * 100)}%</div>
+              </div>
+
               <div className={`absolute inset-0 overflow-hidden pointer-events-none ${isFlying ? 'animate-pulse' : ''}`}>
                  {Array.from({length: 40}).map((_, i) => (
                    <div 
@@ -274,7 +305,7 @@ const AutoPilot: React.FC = () => {
                       height: Math.random() * 3 + 'px',
                       left: Math.random() * 100 + '%',
                       top: Math.random() * 100 + '%',
-                      animation: isFlying ? `drift ${Math.random() * 2 + 1}s infinite linear` : 'none'
+                      animation: isFlying ? `drift ${Math.random() * 1.5 + 0.5}s infinite linear` : 'none'
                     }}
                    ></div>
                  ))}
