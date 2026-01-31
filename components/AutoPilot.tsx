@@ -15,20 +15,20 @@ const FAILURE_DETAILS: Record<string, FailureInfo> = {
   NAV_ERROR: {
     title: 'תקלת ניווט שמימי',
     icon: '🧭',
-    details: 'הכוכבים קצת מטושטשים היום! הטלסקופ של החללית התבלבל בין כוכב הצפון לאסטרואיד נוצץ.',
-    recovery: 'לחצו על "תיקון" כדי לנקות את העדשה ולאפס את המפות!'
+    details: 'מחשב הניווט נכנס לסחרור! ענן אבק כוכבים חסם את חיישני המיקום והחללית חושבת שהיא בתוך חור שחור (אל דאגה, היא לא!).',
+    recovery: 'לחצו על כפתור "תיקון מערכות" כדי לאפס את המצפן השמימי ולכייל את המפות מחדש.'
   },
   COMM_LOSS: {
     title: 'ניתוק תקשורת לווינית',
     icon: '📡',
-    details: 'אופס! אנטנת הקשר הסתובבה לכיוון הלא נכון בגלל רוח שמש חזקה.',
-    recovery: 'לחצו על "תיקון" כדי לכוון מחדש את האנטנה לכדור הארץ!'
+    details: 'סערה אלקטרומגנטית מכוכב לכת סמוך שיבשה את שידורי הרדיו. צוות הקרקע בבסיס האם לא מצליח לשמוע את הדיווחים שלכם!',
+    recovery: 'לחצו על כפתור "תיקון מערכות" כדי להפעיל את אנטנת הגיבוי ולחזק את האות מהלוויינים.'
   },
   ENGINE_HEAT: {
     title: 'התחממות יתר במנועים',
     icon: '🔥',
-    details: 'המנועים עבדו קצת יותר מדי קשה בזינוק! הם צריכים רגע להתקרר.',
-    recovery: 'לחצו על "תיקון" כדי להפעיל את מערכת קירור הנוזל!'
+    details: 'מנועי הפלזמה הגיעו לטמפרטורה של לבה רותחת! הגענו למהירות גבוהה מדי מהר מדי והמערכת זקוקה לאוורור דחוף.',
+    recovery: 'לחצו על כפתור "תיקון מערכות" כדי לפתוח את פתחי הקירור ולהזרים חנקן נוזלי למנועים.'
   }
 };
 
