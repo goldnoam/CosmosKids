@@ -1,3 +1,4 @@
+
 {
   "name": "astronomy-kids-hub",
   "version": "1.0.0",
@@ -7,8 +8,17 @@
     "react": "^19.0.0",
     "react-dom": "^19.0.0"
   },
+  "devDependencies": {
+    "vite": "^6.0.0",
+    "@vitejs/plugin-react": "^4.3.4",
+    "typescript": "^5.7.0",
+    "tailwindcss": "^3.4.1",
+    "autoprefixer": "^10.4.17",
+    "postcss": "^8.4.35"
+  },
   "scripts": {
-    "dev": "echo 'No dev step needed'",
-    "build": "echo 'No build step needed'"
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
   }
 }
