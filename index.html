@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="he" dir="rtl" class="dark" suppressHydrationWarning>
   <head>
@@ -5,21 +6,27 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     
     <!-- SEO Meta Tags -->
-    <title>קוסמוס קידס - חוקרים את היקום | אסטרונומיה לילדים</title>
-    <meta name="description" content="אתר אסטרונומיה אינטראקטיבי וצבעוני לילדים ונוער. למדו על כוכבי הלכת, מערכת השמש וסודות הגלקסיה." />
-    <meta name="keywords" content="אסטרונומיה, ילדים, חלל, כוכבי לכת, מערכת השמש, מדע לילדים, קוסמוס" />
+    <title>קוסמוס קידס - חוקרים את היקום | אסטרונומיה לילדים ונוער</title>
+    <meta name="description" content="אתר אסטרונומיה אינטראקטיבי וצבעוני לילדים ונוער. למדו על כוכבי הלכת, מערכת השמש וסודות הגלקסיה במסע בין-כוכבי מרתק." />
+    <meta name="keywords" content="אסטרונומיה, ילדים, חלל, כוכבי לכת, מערכת השמש, מדע לילדים, קוסמוס, גלקסיה, חללית" />
     <meta name="author" content="Noam Gold AI" />
     <meta name="robots" content="index, follow" />
 
     <!-- Open Graph / Social Media -->
     <meta property="og:type" content="website" />
     <meta property="og:title" content="קוסמוס קידס - חוקרים את היקום" />
-    <meta property="og:description" content="מסע מרתק בין כוכבים לילדים ונוער." />
+    <meta property="og:description" content="מסע מרתק בין כוכבים לילדים ונוער. בואו לגלות את סודות החלל!" />
     <meta property="og:image" content="https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=1200" />
+    <meta property="og:url" content="https://cosmoskids.vercel.app" />
+
+    <!-- Google AdSense -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-0274741291001288" crossorigin="anonymous"></script>
 
     <!-- Favicon -->
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🚀</text></svg>">
 
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;700;900&family=Assistant:wght@300;400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="index.css">
     <style>
@@ -60,8 +67,8 @@
     "react-dom": "https://esm.sh/react-dom@19.0.0",
     "react-dom/client": "https://esm.sh/react-dom@19.0.0/client",
     "@google/genai": "https://esm.sh/@google/genai",
-    "react-dom/": "https://esm.sh/react-dom@^19.2.4/",
-    "react/": "https://esm.sh/react@^19.2.4/"
+    "react-dom/": "https://esm.sh/react-dom@19.0.0/",
+    "react/": "https://esm.sh/react@19.0.0/"
   }
 }
 </script>
@@ -102,5 +109,6 @@
         }
       });
     </script>
+    <script type="module" src="index.tsx"></script>
   </body>
 </html>

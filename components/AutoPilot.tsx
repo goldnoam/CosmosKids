@@ -36,7 +36,6 @@ const AutoPilot: React.FC = () => {
     setShowConfirmation(true);
   };
 
-  // Fixed: Refactored flight logic to support pause/resume and fixed variable declaration error
   const startFlight = (resume = false) => {
     if (!destination) return;
     
@@ -55,13 +54,11 @@ const AutoPilot: React.FC = () => {
       setLogs(prev => ['מפעיל מערכות גיבוי... חוזר למסלול.', ...prev].slice(0, 8));
     }
 
-    const duration = 8000; // 8 seconds flight
+    const duration = 8000;
     const interval = 50;
     const steps = duration / interval;
-    // If resuming, start from where we left off
     let currentStep = Math.floor((progress / 100) * steps);
 
-    // FIXED: Declare allMessages separately to avoid block-scoped variable error on line 71/74
     const allMessagesList = [
       "מפעיל מנועי דחף...",
       "עובר את מהירות הקול...",
@@ -73,7 +70,6 @@ const AutoPilot: React.FC = () => {
       "מפעיל מנועי בלימה...",
       "מתכונן לנחיתה..."
     ];
-    // Slice based on current progress
     const messages = allMessagesList.slice(Math.floor(allMessagesList.length * (progress / 100)));
 
     timerRef.current = window.setInterval(() => {
@@ -81,7 +77,6 @@ const AutoPilot: React.FC = () => {
       const newProgress = Math.min((currentStep / steps) * 100, 100);
       setProgress(newProgress);
 
-      // Random failure simulation (10% chance between 30% and 70% progress)
       if (!resume && newProgress > 30 && newProgress < 70 && Math.random() < 0.005) {
         triggerFailure();
         return;
@@ -100,7 +95,6 @@ const AutoPilot: React.FC = () => {
     }, interval);
   };
 
-  // Added pause function
   const pauseFlight = () => {
     if (timerRef.current) {
       clearInterval(timerRef.current);
@@ -212,7 +206,6 @@ const AutoPilot: React.FC = () => {
             {destination ? `שגר חללית ל${destination.name}! 🚀` : 'בחר יעד קודם'}
           </button>
 
-          {/* Confirmation Dialog Overlay */}
           {showConfirmation && (
             <div className="absolute inset-0 z-50 flex items-center justify-center p-4">
               <div className="absolute inset-0 bg-slate-950/80 backdrop-blur-sm rounded-3xl"></div>
@@ -242,7 +235,6 @@ const AutoPilot: React.FC = () => {
         </div>
       ) : (
         <div className="bg-slate-900 p-6 md:p-10 rounded-3xl border-4 border-slate-800 shadow-[0_0_50px_rgba(0,0,0,0.5)] relative overflow-hidden">
-          {/* Dashboard UI */}
           <div className="absolute top-0 left-0 w-full h-full opacity-10 pointer-events-none">
             <div className="grid grid-cols-10 h-full border-l border-slate-500/20">
               {Array.from({length: 10}).map((_, i) => <div key={i} className="border-r border-slate-500/20 h-full"></div>)}
@@ -263,7 +255,6 @@ const AutoPilot: React.FC = () => {
             </div>
 
             <div className="h-64 md:h-80 w-full bg-slate-950 rounded-2xl border border-slate-800 relative overflow-hidden flex items-center justify-center">
-              {/* Starfield simulation during flight */}
               <div className={`absolute inset-0 overflow-hidden pointer-events-none ${isFlying ? 'animate-pulse' : ''}`}>
                  {Array.from({length: 40}).map((_, i) => (
                    <div 
@@ -334,7 +325,6 @@ const AutoPilot: React.FC = () => {
               )}
             </div>
 
-            {/* Flight Controls: Pause and Reset */}
             <div className="flex gap-4">
               {isFlying && (
                 <button
@@ -400,7 +390,6 @@ const AutoPilot: React.FC = () => {
           </h4>
           <p className="text-sm text-slate-700 dark:text-slate-300 leading-relaxed">
             בדיוק כמו שיש לנו קווי אורך ורוחב בכדור הארץ, אסטרונומים משתמשים ב<strong>עלייה ישרה (Right Ascension)</strong> וב<strong>נטייה (Declination)</strong> כדי למצוא כוכבים וכוכבי לכת בשמיים. 
-            זה עוזר לחלליות שלנו לדעת בדיוק לאיזה כיוון לטוס!
           </p>
         </div>
         <div className="bg-white dark:bg-slate-800/40 p-6 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm transition-colors">
@@ -408,7 +397,7 @@ const AutoPilot: React.FC = () => {
             <span>🛰️</span> איך הטייס האוטומטי עובד?
           </h4>
           <p className="text-sm text-slate-700 dark:text-slate-300 leading-relaxed">
-            המחשב של החללית מחשב את המרחק העצום בין כדור הארץ ליעד, מזהה מכשולים כמו אסטרואידים, ומשתמש בכבידה של השמש כדי "לגלוש" במהירות שיא. המערכת שלנו מעדכנת את יומן הטיסה בכל כמה שניות כדי שתדעו בדיוק מה קורה בחוץ.
+            המחשב של החללית מחשב את המרחק העצום בין כדור הארץ ליעד, מזהה מכשולים כמו אסטרואידים, ומשתמש בכבידה של השמש כדי "לגלוש" במהירות שיא.
           </p>
         </div>
       </div>
