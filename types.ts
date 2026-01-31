@@ -7,6 +7,7 @@ export interface Planet {
   funFact: string;
   color: string;
   distanceFromSun: string;
+  distanceFromEarth: string;
   size: string;
   image: string;
   moonsCount?: string;

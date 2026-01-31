@@ -251,14 +251,18 @@ const PlanetExplorer: React.FC = () => {
               {selectedBody.description}
             </p>
 
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
               <div className="bg-slate-100 dark:bg-slate-800/80 p-4 rounded-2xl border border-slate-200 dark:border-slate-700">
                 <div className="text-xs text-slate-500 font-bold uppercase mb-1">קוטר</div>
                 <div className="text-lg font-black">{selectedBody.size}</div>
               </div>
               <div className="bg-slate-100 dark:bg-slate-800/80 p-4 rounded-2xl border border-slate-200 dark:border-slate-700">
-                <div className="text-xs text-slate-500 font-bold uppercase mb-1">{viewMode === 'moon' ? 'מרחק מהארץ' : 'מרחק מהשמש'}</div>
+                <div className="text-xs text-slate-500 font-bold uppercase mb-1">מרחק מהשמש</div>
                 <div className="text-lg font-black">{selectedBody.distanceFromSun}</div>
+              </div>
+              <div className="bg-slate-100 dark:bg-slate-800/80 p-4 rounded-2xl border border-slate-200 dark:border-slate-700">
+                <div className="text-xs text-slate-500 font-bold uppercase mb-1">מרחק מהארץ</div>
+                <div className="text-lg font-black">{selectedBody.distanceFromEarth}</div>
               </div>
             </div>
           </div>
