@@ -13,6 +13,7 @@ const Layout: React.FC<LayoutProps> = ({ children, activeTab, setActiveTab, isDa
   const navItems = [
     { id: 'home', label: 'בית', icon: '🏠' },
     { id: 'planets', label: 'מערכת השמש', icon: '🪐' },
+    { id: 'spaceship', label: 'חללית', icon: '🚀' },
     { id: 'quiz', label: 'חידון חלל', icon: '📝' },
   ];
 

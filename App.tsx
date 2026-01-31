@@ -1,8 +1,10 @@
+
 import React, { useState, useEffect } from 'react';
 import Layout from './components/Layout';
 import Hero from './components/Hero';
 import PlanetExplorer from './components/PlanetExplorer';
 import SpaceQuiz from './components/SpaceQuiz';
+import AutoPilot from './components/AutoPilot';
 
 const App: React.FC = () => {
   const [activeTab, setActiveTab] = useState<string>('home');
@@ -30,6 +32,8 @@ const App: React.FC = () => {
         return <Hero onExplore={() => setActiveTab('planets')} />;
       case 'planets':
         return <PlanetExplorer />;
+      case 'spaceship':
+        return <AutoPilot />;
       case 'quiz':
         return <SpaceQuiz />;
       default:
@@ -37,8 +41,6 @@ const App: React.FC = () => {
     }
   };
 
-  // MUST return null on the first render to match the empty <div id="root"></div> in index.html
-  // This prevents hydration mismatch errors (like Error 418) in production builds.
   if (!isMounted) {
     return null;
   }
