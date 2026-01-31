@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { PLANETS, MOON_DATA } from '../constants';
 import { Planet } from '../types';
 
@@ -9,17 +9,21 @@ const RoverSimulation: React.FC = () => {
 
   const gridSize = 5;
   
-  const move = (dx: number, dy: number) => {
-    const newX = Math.max(0, Math.min(gridSize - 1, pos.x + dx));
-    const newY = Math.max(0, Math.min(gridSize - 1, pos.y + dy));
-    
-    if (newX !== pos.x || newY !== pos.y) {
-      setPos({ x: newX, y: newY });
-      addLog(`נע לכיוון (${newX}, ${newY})`);
-    } else {
-      addLog('מכשול זוהה! לא ניתן לנוע לכיוון זה.');
-    }
-  };
+  // Refactored to use functional state update for safer asynchronous handling with keydown listeners
+  const move = useCallback((dx: number, dy: number) => {
+    setPos(prev => {
+      const newX = Math.max(0, Math.min(gridSize - 1, prev.x + dx));
+      const newY = Math.max(0, Math.min(gridSize - 1, prev.y + dy));
+      
+      if (newX !== prev.x || newY !== prev.y) {
+        addLog(`נע לכיוון (${newX}, ${newY})`);
+        return { x: newX, y: newY };
+      } else {
+        addLog('מכשול זוהה! לא ניתן לנוע לכיוון זה.');
+        return prev;
+      }
+    });
+  }, []);
 
   const addLog = (msg: string) => {
     setLog(prev => [msg, ...prev].slice(0, 5));
@@ -39,6 +43,22 @@ const RoverSimulation: React.FC = () => {
       setScanning(false);
     }, 1500);
   };
+
+  // Support WASD keyboard controls
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      const key = e.key.toLowerCase();
+      switch (key) {
+        case 'w': move(0, -1); break;
+        case 's': move(0, 1); break;
+        case 'a': move(-1, 0); break;
+        case 'd': move(1, 0); break;
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [move]);
 
   return (
     <div className="mt-12 p-6 md:p-8 bg-slate-900 border-2 border-red-900/50 rounded-3xl shadow-2xl relative overflow-hidden">
@@ -82,19 +102,19 @@ const RoverSimulation: React.FC = () => {
 
           <div className="grid grid-cols-3 gap-2 max-w-[200px] mx-auto">
             <div></div>
-            <button onClick={() => move(0, -1)} className="p-4 bg-slate-800 hover:bg-red-600 rounded-xl transition-colors shadow-lg">⬆️</button>
+            <button onClick={() => move(0, -1)} className="p-4 bg-slate-800 hover:bg-red-600 rounded-xl transition-colors shadow-lg" title="W key">⬆️</button>
             <div></div>
-            <button onClick={() => move(-1, 0)} className="p-4 bg-slate-800 hover:bg-red-600 rounded-xl transition-colors shadow-lg">⬅️</button>
+            <button onClick={() => move(-1, 0)} className="p-4 bg-slate-800 hover:bg-red-600 rounded-xl transition-colors shadow-lg" title="A key">⬅️</button>
             <button onClick={scanTerrain} disabled={scanning} className="p-4 bg-red-700 hover:bg-red-500 rounded-xl transition-colors shadow-lg flex items-center justify-center">
               {scanning ? '⏳' : '🔍'}
             </button>
-            <button onClick={() => move(1, 0)} className="p-4 bg-slate-800 hover:bg-red-600 rounded-xl transition-colors shadow-lg">➡️</button>
+            <button onClick={() => move(1, 0)} className="p-4 bg-slate-800 hover:bg-red-600 rounded-xl transition-colors shadow-lg" title="D key">➡️</button>
             <div></div>
-            <button onClick={() => move(0, 1)} className="p-4 bg-slate-800 hover:bg-red-600 rounded-xl transition-colors shadow-lg">⬇️</button>
+            <button onClick={() => move(0, 1)} className="p-4 bg-slate-800 hover:bg-red-600 rounded-xl transition-colors shadow-lg" title="S key">⬇️</button>
             <div></div>
           </div>
           
-          <p className="text-center text-xs text-slate-500">השתמשו בחצים כדי לנוע על פני מאדים!</p>
+          <p className="text-center text-xs text-slate-500">השתמשו בחצים או במקשי WASD כדי לנוע על פני מאדים!</p>
         </div>
       </div>
     </div>
@@ -121,15 +141,15 @@ const PlanetExplorer: React.FC = () => {
   return (
     <div className="flex flex-col gap-6 md:gap-8 animate-fadeIn pb-20 md:pb-0">
       <div className="text-center mb-2 md:mb-4">
-        <h2 className="text-3xl md:text-4xl font-black mb-4">חוקרים את השמיים</h2>
+        <h2 className="text-3xl md:text-4xl font-black mb-4 dark:text-white">חוקרים את השמיים</h2>
         
-        <div className="inline-flex p-1 bg-slate-800 rounded-full border border-slate-700 mb-6">
+        <div className="inline-flex p-1 bg-slate-100 dark:bg-slate-800 rounded-full border border-slate-200 dark:border-slate-700 mb-6 transition-colors">
           <button
             onClick={() => handleToggleMode('planets')}
             className={`px-6 py-2 rounded-full font-bold transition-all ${
               viewMode === 'planets' 
                 ? 'bg-cyan-600 text-white shadow-lg' 
-                : 'text-slate-400 hover:text-white'
+                : 'text-slate-500 dark:text-slate-400 hover:text-cyan-600 dark:hover:text-white'
             }`}
           >
             כוכבי לכת
@@ -139,14 +159,14 @@ const PlanetExplorer: React.FC = () => {
             className={`px-6 py-2 rounded-full font-bold transition-all ${
               viewMode === 'moon' 
                 ? 'bg-purple-600 text-white shadow-lg' 
-                : 'text-slate-400 hover:text-white'
+                : 'text-slate-500 dark:text-slate-400 hover:text-purple-600 dark:hover:text-white'
             }`}
           >
             הירח
           </button>
         </div>
         
-        <p className="text-slate-400 text-sm md:text-base px-4">
+        <p className="text-slate-600 dark:text-slate-400 text-sm md:text-base px-4">
           {viewMode === 'planets' ? 'לחצו על כוכב לכת כדי לגלות את סודותיו!' : 'גלו את השכן הכי קרוב שלנו בחלל!'}
         </p>
       </div>
@@ -176,7 +196,7 @@ const PlanetExplorer: React.FC = () => {
         </div>
       )}
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8 items-center bg-slate-900/50 p-6 md:p-8 rounded-3xl border border-slate-700 backdrop-blur-sm mx-auto w-full">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8 items-center bg-white dark:bg-slate-900/50 p-6 md:p-8 rounded-3xl border border-slate-200 dark:border-slate-700 shadow-xl dark:backdrop-blur-sm mx-auto w-full transition-colors">
         <div className="flex justify-center order-1 md:order-none">
           <div className={`w-48 h-48 md:w-80 md:h-80 rounded-full flex items-center justify-center relative shadow-2xl ${selectedBody.color} overflow-hidden group`}>
             <img 
@@ -185,7 +205,7 @@ const PlanetExplorer: React.FC = () => {
               className="w-full h-full object-cover rounded-full group-hover:scale-110 transition-transform duration-[3000ms] ease-out"
             />
             <div className="absolute inset-0 bg-gradient-to-tr from-black/50 to-transparent"></div>
-            <div className={`absolute -top-2 md:-top-4 -right-2 md:-right-4 p-2 md:p-3 rounded-xl border border-slate-600 shadow-lg rotate-12 ${viewMode === 'moon' ? 'bg-indigo-600' : 'bg-slate-800'}`}>
+            <div className={`absolute -top-2 md:-top-4 -right-2 md:-right-4 p-2 md:p-3 rounded-xl border border-white/20 dark:border-slate-600 shadow-lg rotate-12 ${viewMode === 'moon' ? 'bg-indigo-600' : 'bg-slate-800'}`}>
               <span className="text-xl md:text-2xl">{viewMode === 'moon' ? '🌙' : '✨'}</span>
             </div>
           </div>
@@ -194,32 +214,32 @@ const PlanetExplorer: React.FC = () => {
         <div className="space-y-4 order-2 md:order-none">
           <div className="flex justify-between items-start flex-wrap gap-2">
             <div>
-              <h3 className="text-4xl md:text-5xl font-black text-white">{selectedBody.name}</h3>
-              <p className="text-lg md:text-xl text-cyan-400 italic">{selectedBody.englishName}</p>
+              <h3 className="text-4xl md:text-5xl font-black text-slate-900 dark:text-white">{selectedBody.name}</h3>
+              <p className="text-lg md:text-xl text-cyan-600 dark:text-cyan-400 italic">{selectedBody.englishName}</p>
             </div>
             <div className="text-right">
-              <div className="text-slate-400 text-[10px] md:text-sm uppercase tracking-wider">קוטר</div>
-              <div className="text-white font-bold text-sm md:text-base">{selectedBody.size}</div>
+              <div className="text-slate-500 dark:text-slate-400 text-[10px] md:text-sm uppercase tracking-wider">קוטר</div>
+              <div className="text-slate-900 dark:text-white font-bold text-sm md:text-base">{selectedBody.size}</div>
             </div>
           </div>
 
-          <p className="text-base md:text-lg text-slate-300 leading-relaxed">
+          <p className="text-base md:text-lg text-slate-700 dark:text-slate-300 leading-relaxed">
             {selectedBody.description}
           </p>
 
-          <div className={`p-4 rounded-2xl border ${viewMode === 'moon' ? 'bg-indigo-900/30 border-indigo-700/50' : 'bg-cyan-900/30 border-cyan-700/50'}`}>
-            <h4 className={`font-bold flex items-center gap-2 mb-1 ${viewMode === 'moon' ? 'text-indigo-400' : 'text-cyan-400'}`}>
+          <div className={`p-4 rounded-2xl border ${viewMode === 'moon' ? 'bg-indigo-50 dark:bg-indigo-900/30 border-indigo-200 dark:border-indigo-700/50' : 'bg-cyan-50 dark:bg-cyan-900/30 border-cyan-200 dark:border-cyan-700/50'}`}>
+            <h4 className={`font-bold flex items-center gap-2 mb-1 ${viewMode === 'moon' ? 'text-indigo-600 dark:text-indigo-400' : 'text-cyan-600 dark:text-cyan-400'}`}>
               <span>💡</span> עובדה מגניבה:
             </h4>
-            <p className="text-white text-sm md:text-base leading-relaxed">{selectedBody.funFact}</p>
+            <p className="text-slate-800 dark:text-white text-sm md:text-base leading-relaxed">{selectedBody.funFact}</p>
           </div>
 
           <div className="flex gap-4">
-            <div className="bg-slate-800/80 px-4 py-3 rounded-xl flex-1 text-center border border-slate-700">
-              <div className="text-[10px] md:text-xs text-slate-400 uppercase tracking-wide mb-1">
+            <div className="bg-slate-100 dark:bg-slate-800/80 px-4 py-3 rounded-xl flex-1 text-center border border-slate-200 dark:border-slate-700 transition-colors">
+              <div className="text-[10px] md:text-xs text-slate-500 dark:text-slate-400 uppercase tracking-wide mb-1">
                 {viewMode === 'moon' ? 'מרחק מהארץ' : 'מרחק מהשמש'}
               </div>
-              <div className="text-sm md:text-base font-bold text-white">{selectedBody.distanceFromSun}</div>
+              <div className="text-sm md:text-base font-bold text-slate-900 dark:text-white">{selectedBody.distanceFromSun}</div>
             </div>
           </div>
         </div>
