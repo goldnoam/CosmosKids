@@ -1,4 +1,3 @@
-
 import React from 'react';
 
 interface LayoutProps {
@@ -57,6 +56,14 @@ const Layout: React.FC<LayoutProps> = ({ children, activeTab, setActiveTab, isDa
       </header>
 
       <main className="flex-grow container mx-auto px-4 py-8 max-w-6xl">
+        {/* AdSense Leaderboard Placeholder */}
+        <div className="w-full flex justify-center mb-8">
+          <ins className="adsbygoogle"
+               style={{ display: 'block', width: '100%', maxWidth: '728px', height: '90px' }}
+               data-ad-client="ca-pub-0274741291001288"
+               data-ad-slot="1234567890"></ins>
+        </div>
+
         {children}
       </main>
 

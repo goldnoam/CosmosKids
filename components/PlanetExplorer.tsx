@@ -131,15 +131,15 @@ const RoverSimulation: React.FC = () => {
           <div className="flex flex-col items-center gap-4">
             <div className="grid grid-cols-3 gap-2 max-w-[200px] mx-auto">
               <div></div>
-              <button onClick={() => move(0, -1)} disabled={isPaused} className="p-4 bg-slate-800 hover:bg-red-600 disabled:opacity-50 rounded-xl transition-colors shadow-lg font-black text-white" title="W key">W</button>
+              <button onClick={() => move(0, -1)} disabled={isPaused} className="p-4 bg-slate-800 hover:bg-red-600 disabled:opacity-50 rounded-xl transition-colors shadow-lg font-black text-white active:scale-90" title="W key">W</button>
               <div></div>
-              <button onClick={() => move(-1, 0)} disabled={isPaused} className="p-4 bg-slate-800 hover:bg-red-600 disabled:opacity-50 rounded-xl transition-colors shadow-lg font-black text-white" title="A key">A</button>
-              <button onClick={scanTerrain} disabled={scanning || isPaused} className="p-4 bg-red-700 hover:bg-red-500 disabled:opacity-50 rounded-xl transition-colors shadow-lg flex items-center justify-center">
+              <button onClick={() => move(-1, 0)} disabled={isPaused} className="p-4 bg-slate-800 hover:bg-red-600 disabled:opacity-50 rounded-xl transition-colors shadow-lg font-black text-white active:scale-90" title="A key">A</button>
+              <button onClick={scanTerrain} disabled={scanning || isPaused} className="p-4 bg-red-700 hover:bg-red-500 disabled:opacity-50 rounded-xl transition-colors shadow-lg flex items-center justify-center active:scale-90">
                 {scanning ? '⏳' : '🔍'}
               </button>
-              <button onClick={() => move(1, 0)} disabled={isPaused} className="p-4 bg-slate-800 hover:bg-red-600 disabled:opacity-50 rounded-xl transition-colors shadow-lg font-black text-white" title="D key">D</button>
+              <button onClick={() => move(1, 0)} disabled={isPaused} className="p-4 bg-slate-800 hover:bg-red-600 disabled:opacity-50 rounded-xl transition-colors shadow-lg font-black text-white active:scale-90" title="D key">D</button>
               <div></div>
-              <button onClick={() => move(0, 1)} disabled={isPaused} className="p-4 bg-slate-800 hover:bg-red-600 disabled:opacity-50 rounded-xl transition-colors shadow-lg font-black text-white" title="S key">S</button>
+              <button onClick={() => move(0, 1)} disabled={isPaused} className="p-4 bg-slate-800 hover:bg-red-600 disabled:opacity-50 rounded-xl transition-colors shadow-lg font-black text-white active:scale-90" title="S key">S</button>
               <div></div>
             </div>
             <p className="text-center text-xs text-slate-500 font-bold uppercase tracking-wider">השתמשו ב-WASD או בכפתורים כדי לנוע!</p>
