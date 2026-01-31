@@ -28,7 +28,6 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;700;900&family=Assistant:wght@300;400;700&display=swap" rel="stylesheet">
     
-    <!-- Tailwind Play CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
       tailwind.config = {
@@ -49,9 +48,7 @@
     
     <style type="text/tailwindcss">
       @layer base {
-        body {
-          @apply antialiased font-heebo;
-        }
+        body { @apply antialiased font-heebo; }
       }
       .space-gradient {
         background: radial-gradient(circle at center, #312e81 0%, #020617 100%);
@@ -60,39 +57,21 @@
         0%, 100% { transform: translateY(0px); }
         50% { transform: translateY(-20px); }
       }
-      .float-animation {
-        animation: float 6s ease-in-out infinite;
-      }
-      .no-scrollbar::-webkit-scrollbar {
-        display: none;
-      }
-      .no-scrollbar {
-        -ms-overflow-style: none;
-        scrollbar-width: none;
-      }
+      .float-animation { animation: float 6s ease-in-out infinite; }
+      .no-scrollbar::-webkit-scrollbar { display: none; }
+      .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
       @keyframes fadeIn {
         from { opacity: 0; transform: translateY(10px); }
         to { opacity: 1; transform: translateY(0); }
       }
-      .animate-fadeIn {
-        animation: fadeIn 0.5s ease-out forwards;
-      }
+      .animate-fadeIn { animation: fadeIn 0.5s ease-out forwards; }
       .stars-container {
         position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        z-index: -1;
-        pointer-events: none;
+        top: 0; left: 0; width: 100%; height: 100%;
+        z-index: -1; pointer-events: none;
         background: radial-gradient(ellipse at bottom, #1B2735 0%, #090A0F 100%);
       }
-      .star {
-        position: absolute;
-        background-color: white;
-        border-radius: 50%;
-        pointer-events: none;
-      }
+      .star { position: absolute; background-color: white; border-radius: 50%; pointer-events: none; }
       @keyframes twinkle {
         0%, 100% { opacity: 0.2; transform: scale(0.8); }
         50% { opacity: 0.8; transform: scale(1.1); }
@@ -109,7 +88,6 @@
     "react": "https://esm.sh/react@19.0.0",
     "react-dom": "https://esm.sh/react-dom@19.0.0",
     "react-dom/client": "https://esm.sh/react-dom@19.0.0/client",
-    "@google/genai": "https://esm.sh/@google/genai",
     "react-dom/": "https://esm.sh/react-dom@^19.2.4/",
     "react/": "https://esm.sh/react@^19.2.4/"
   }
@@ -117,7 +95,6 @@
 </script>
 
     <script>
-      // Enhanced Production Error Handling
       window.onerror = function(msg, url, lineNo, columnNo, error) {
         console.error('Global Error:', msg, error);
         const root = document.getElementById('root');
@@ -125,14 +102,11 @@
           root.innerHTML = `
             <div class="text-center p-8 bg-slate-900 text-white rounded-3xl border border-red-500 max-w-md mx-auto mt-20 shadow-2xl animate-fadeIn">
               <div class="text-6xl mb-4">☄️</div>
-              <h1 class="text-2xl font-black mb-4">תקלה במערכות הניווט</h1>
-              <p class="text-slate-400 mb-6 leading-relaxed">
-                משהו השתבש בטעינת היקום. נראה שיש התנגשות בין גלקסיות בגרסת הקוד.
+              <h1 class="text-2xl font-black mb-4 text-red-500">תקלת שיגור חמורה</h1>
+              <p class="text-slate-400 mb-6 leading-relaxed font-heebo">
+                מערכות הניווט זיהו תקלה בטעינת היקום. נראה שיש ענן אבק כוכבים שחוסם את הגישה.
               </p>
-              <div class="bg-black/50 p-3 rounded-lg text-left font-mono text-xs text-red-400 mb-6 overflow-auto max-h-32">
-                ${msg}
-              </div>
-              <button onclick="window.location.reload()" class="bg-cyan-600 hover:bg-cyan-500 px-6 py-2 rounded-full font-bold transition-all">
+              <button onclick="window.location.reload()" class="bg-cyan-600 hover:bg-cyan-500 px-8 py-3 rounded-full font-bold transition-all shadow-lg">
                 ניסיון שיגור מחודש 🚀
               </button>
             </div>
@@ -140,18 +114,13 @@
         }
         return false;
       };
-
-      // Catch unhandled promise rejections
-      window.onunhandledrejection = function(event) {
-        console.error('Unhandled Promise Rejection:', event.reason);
-      };
     </script>
   </head>
   <body class="bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-white transition-colors duration-300" suppressHydrationWarning>
     <div id="root" class="min-h-screen flex items-center justify-center">
       <div class="text-center">
-        <div class="text-4xl mb-4 animate-bounce">🚀</div>
-        <p class="text-slate-500 font-bold">מכין את החללית לשיגור...</p>
+        <div class="text-5xl mb-6 animate-bounce">🚀</div>
+        <p class="text-slate-500 font-black text-xl">מכין את החללית לשיגור...</p>
       </div>
     </div>
     <div class="stars-container opacity-30 dark:opacity-100" id="stars"></div>
@@ -165,29 +134,19 @@
               const star = document.createElement('div');
               star.className = `star ${layerClass}`;
               const size = Math.random() * baseSize + 0.3;
-              const x = Math.random() * 110 - 5;
-              const y = Math.random() * 110 - 5;
-              star.style.width = `${size}px`;
-              star.style.height = `${size}px`;
-              star.style.left = `${x}%`;
-              star.style.top = `${y}%`;
-              const twinkleDuration = baseDuration + Math.random() * 4;
-              const driftDuration = 50 + Math.random() * 100;
-              const delay = Math.random() * -20;
-              star.style.animation = `twinkle ${twinkleDuration}s infinite ease-in-out ${delay}s, drift ${driftDuration}s infinite linear alternate`;
-              if (Math.random() > 0.8) {
-                star.style.boxShadow = `0 0 ${size * 5}px ${size}px rgba(255, 255, 255, 0.4)`;
-              }
+              star.style.width = star.style.height = `${size}px`;
+              star.style.left = `${Math.random() * 110 - 5}%`;
+              star.style.top = `${Math.random() * 110 - 5}%`;
+              star.style.animation = `twinkle ${baseDuration + Math.random() * 4}s infinite ease-in-out ${Math.random() * -20}s, drift ${50 + Math.random() * 100}s infinite linear alternate`;
               fragment.appendChild(star);
             }
             starsContainer.appendChild(fragment);
           };
           createStars(100, 'layer-1', 0.8, 4);
           createStars(50, 'layer-2', 1.5, 6);
-          createStars(10, 'layer-3', 2.5, 8);
         }
       });
     </script>
-    <script type="module" src="index.tsx"></script>
+    <script type="module" src="./index.tsx"></script>
   </body>
 </html>
