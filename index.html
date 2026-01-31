@@ -115,6 +115,12 @@
   }
 }
 </script>
+    <script>
+      window.onerror = function(msg, url, lineNo, columnNo, error) {
+        console.error('משהו השתבש בטעינת היקום:', msg, error);
+        return false;
+      };
+    </script>
   </head>
   <body class="bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-white transition-colors duration-300" suppressHydrationWarning>
     <div id="root" class="min-h-screen flex items-center justify-center">
