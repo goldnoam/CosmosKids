@@ -9,6 +9,9 @@ export interface Planet {
   distanceFromSun: string;
   size: string;
   image: string;
+  moonsCount?: string;
+  hasRings?: boolean;
+  missions?: string[];
 }
 
 export interface ChatMessage {

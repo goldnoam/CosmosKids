@@ -4,6 +4,34 @@ import { Planet } from '../types';
 
 type FailureType = 'NAV_ERROR' | 'COMM_LOSS' | 'ENGINE_HEAT' | null;
 
+interface FailureInfo {
+  title: string;
+  icon: string;
+  details: string;
+  recovery: string;
+}
+
+const FAILURE_DETAILS: Record<string, FailureInfo> = {
+  NAV_ERROR: {
+    title: 'תקלת ניווט שמימי',
+    icon: '🧭',
+    details: 'הכוכבים קצת מטושטשים היום! הטלסקופ של החללית התבלבל בין כוכב הצפון לאסטרואיד נוצץ.',
+    recovery: 'לחצו על "תיקון" כדי לנקות את העדשה ולאפס את המפות!'
+  },
+  COMM_LOSS: {
+    title: 'ניתוק תקשורת לווינית',
+    icon: '📡',
+    details: 'אופס! אנטנת הקשר הסתובבה לכיוון הלא נכון בגלל רוח שמש חזקה.',
+    recovery: 'לחצו על "תיקון" כדי לכוון מחדש את האנטנה לכדור הארץ!'
+  },
+  ENGINE_HEAT: {
+    title: 'התחממות יתר במנועים',
+    icon: '🔥',
+    details: 'המנועים עבדו קצת יותר מדי קשה בזינוק! הם צריכים רגע להתקרר.',
+    recovery: 'לחצו על "תיקון" כדי להפעיל את מערכת קירור הנוזל!'
+  }
+};
+
 const AutoPilot: React.FC = () => {
   const [destination, setDestination] = useState<Planet | null>(null);
   const [isFlying, setIsFlying] = useState(false);
@@ -110,15 +138,12 @@ const AutoPilot: React.FC = () => {
     setIsFlying(false);
     setIsFailed(true);
     
-    const errors: { type: FailureType; log: string }[] = [
-      { type: 'NAV_ERROR', log: 'שגיאה קריטית: מערכת הניווט איבדה נעילה על כוכבי ייחוס.' },
-      { type: 'COMM_LOSS', log: 'אזהרה: אובדן קשר עם תחנת הקרקע. אות חלש.' },
-      { type: 'ENGINE_HEAT', log: 'סכנה: התחממות יתר במנוע ימין. מעבר למצב חירום.' }
-    ];
-    
+    const errors: FailureType[] = ['NAV_ERROR', 'COMM_LOSS', 'ENGINE_HEAT'];
     const randomError = errors[Math.floor(Math.random() * errors.length)];
-    setFailureType(randomError.type);
-    setLogs(prev => [randomError.log, 'מבצע עצירת חירום...', ...prev].slice(0, 8));
+    setFailureType(randomError);
+    
+    const info = FAILURE_DETAILS[randomError as string];
+    setLogs(prev => [info.title + ': ' + info.details, 'מבצע עצירת חירום...', ...prev].slice(0, 8));
   };
 
   const handleRepair = () => {
@@ -145,23 +170,7 @@ const AutoPilot: React.FC = () => {
     };
   }, []);
 
-  const getErrorTitle = () => {
-    switch(failureType) {
-      case 'NAV_ERROR': return 'תקלת ניווט שמימי';
-      case 'COMM_LOSS': return 'ניתוק תקשורת לווינית';
-      case 'ENGINE_HEAT': return 'התחממות יתר במנועים';
-      default: return 'תקלה לא ידועה';
-    }
-  };
-
-  const getErrorIcon = () => {
-    switch(failureType) {
-      case 'NAV_ERROR': return '🧭';
-      case 'COMM_LOSS': return '📡';
-      case 'ENGINE_HEAT': return '🔥';
-      default: return '⚠️';
-    }
-  };
+  const currentFailureInfo = failureType ? FAILURE_DETAILS[failureType as string] : null;
 
   return (
     <div className="max-w-4xl mx-auto space-y-8 animate-fadeIn pb-12">
@@ -285,24 +294,33 @@ const AutoPilot: React.FC = () => {
                 </div>
               )}
 
-              {isFailed && (
+              {isFailed && currentFailureInfo && (
                 <div className="absolute inset-0 bg-red-950/60 backdrop-blur-sm flex items-center justify-center p-6">
-                   <div className="bg-slate-900 p-6 rounded-2xl border-2 border-red-600 text-center animate-fadeIn shadow-[0_0_30px_rgba(220,38,38,0.5)] max-w-xs">
-                      <div className="text-4xl mb-3">{getErrorIcon()}</div>
-                      <div className="text-xl font-black text-red-500 mb-2 uppercase">{getErrorTitle()}</div>
-                      <p className="text-slate-300 text-sm mb-6">המערכת זיהתה כשל קריטי המונע המשך טיסה בטוחה.</p>
-                      <div className="flex flex-col gap-2">
+                   <div className="bg-slate-900 p-6 md:p-8 rounded-2xl border-2 border-red-600 text-center animate-fadeIn shadow-[0_0_30px_rgba(220,38,38,0.5)] max-w-md w-full">
+                      <div className="text-5xl mb-4">{currentFailureInfo.icon}</div>
+                      <div className="text-2xl font-black text-red-500 mb-3 uppercase tracking-wide">{currentFailureInfo.title}</div>
+                      
+                      <div className="bg-red-900/20 p-4 rounded-xl border border-red-800/30 mb-6 space-y-3">
+                        <p className="text-slate-200 text-sm leading-relaxed">
+                          <strong>מה קרה?</strong> {currentFailureInfo.details}
+                        </p>
+                        <p className="text-yellow-400 text-sm font-bold">
+                          <strong>איך מתקנים?</strong> {currentFailureInfo.recovery}
+                        </p>
+                      </div>
+
+                      <div className="flex flex-col gap-3">
                         <button
                           onClick={handleRepair}
-                          className="w-full py-2.5 bg-green-600 hover:bg-green-500 text-white font-bold rounded-lg transition-all"
+                          className="w-full py-3 bg-green-600 hover:bg-green-500 text-white font-black rounded-xl transition-all shadow-lg hover:scale-[1.02]"
                         >
-                          נסה לתקן ולהמשיך 🛠️
+                          תיקון מהיר והמשך טיסה 🛠️
                         </button>
                         <button
                           onClick={handleReset}
-                          className="w-full py-2.5 bg-slate-800 hover:bg-slate-700 text-slate-400 font-bold rounded-lg transition-all"
+                          className="w-full py-3 bg-slate-800 hover:bg-slate-700 text-slate-400 font-bold rounded-xl transition-all border border-slate-700"
                         >
-                          בטל משימה וחזור 🏠
+                          בטל משימה וחזור הביתה 🏠
                         </button>
                       </div>
                    </div>
