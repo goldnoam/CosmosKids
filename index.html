@@ -27,12 +27,55 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;700;900&family=Assistant:wght@300;400;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="index.css">
-    <style>
-      body {
-        font-family: 'Heebo', 'Assistant', sans-serif;
-        margin: 0;
-        overflow-x: hidden;
+    
+    <!-- Tailwind Play CDN for immediate browser-side processing -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        darkMode: 'class',
+        theme: {
+          extend: {
+            fontFamily: {
+              heebo: ['Heebo', 'Assistant', 'sans-serif'],
+            },
+            animation: {
+              'float': 'float 6s ease-in-out infinite',
+              'fade-in': 'fadeIn 0.5s ease-out forwards',
+            },
+          },
+        },
+      }
+    </script>
+    
+    <style type="text/tailwindcss">
+      @layer base {
+        body {
+          @apply antialiased font-heebo;
+        }
+      }
+      .space-gradient {
+        background: radial-gradient(circle at center, #312e81 0%, #020617 100%);
+      }
+      @keyframes float {
+        0%, 100% { transform: translateY(0px); }
+        50% { transform: translateY(-20px); }
+      }
+      .float-animation {
+        animation: float 6s ease-in-out infinite;
+      }
+      .no-scrollbar::-webkit-scrollbar {
+        display: none;
+      }
+      .no-scrollbar {
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+      }
+      @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(10px); }
+        to { opacity: 1; transform: translateY(0); }
+      }
+      .animate-fadeIn {
+        animation: fadeIn 0.5s ease-out forwards;
       }
       .stars-container {
         position: fixed;
@@ -59,21 +102,27 @@
         to { transform: translate(-20px, -20px); }
       }
     </style>
+    
     <script type="importmap">
 {
   "imports": {
-    "react": "https://esm.sh/react@19.0.0",
-    "react-dom": "https://esm.sh/react-dom@19.0.0",
-    "react-dom/client": "https://esm.sh/react-dom@19.0.0/client",
+    "react": "https://esm.sh/react@19.0.0?dev",
+    "react-dom": "https://esm.sh/react-dom@19.0.0?dev",
+    "react-dom/client": "https://esm.sh/react-dom@19.0.0/client?dev",
     "@google/genai": "https://esm.sh/@google/genai",
-    "react-dom/": "https://esm.sh/react-dom@19.0.0/",
-    "react/": "https://esm.sh/react@19.0.0/"
+    "react-dom/": "https://esm.sh/react-dom@^19.2.4/",
+    "react/": "https://esm.sh/react@^19.2.4/"
   }
 }
 </script>
   </head>
   <body class="bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-white transition-colors duration-300" suppressHydrationWarning>
-    <div id="root"></div>
+    <div id="root" class="min-h-screen flex items-center justify-center">
+      <div class="text-center">
+        <div class="text-4xl mb-4 animate-bounce">🚀</div>
+        <p class="text-slate-500">טוען את היקום...</p>
+      </div>
+    </div>
     <div class="stars-container opacity-30 dark:opacity-100" id="stars"></div>
     <script>
       window.addEventListener('load', () => {
